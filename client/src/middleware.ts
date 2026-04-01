@@ -31,7 +31,7 @@ export async function middleware(request: NextRequest) {
     }
 
   } catch (error) {
-    console.log("Invalid token", error);
+    console.log("Invalid token", error instanceof Error ? error.message : String(error));
     return NextResponse.redirect(new URL("/signin", request.url));
   }
 }
