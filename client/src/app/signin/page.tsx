@@ -33,7 +33,8 @@ export default function LoginPage() {
   onSuccess:(res:AxiosResponse<User>)=>{
     console.log("log in successfully",res)
     dispatch(setUser(res.data))
-    router.push("/")
+    // Send users directly to an authenticated page after successful signin.
+    router.push("/my-task")
   },
   onError:(error)=>{
     console.log("error in signin in",error)

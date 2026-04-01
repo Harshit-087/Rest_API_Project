@@ -2,11 +2,8 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import {jwtVerify} from "jose"; //IT SUPPORT web crypto 
 
-
-
-// secret should be unit8array not string which is in jsonwebtoken
-const secret = new TextEncoder().encode(process.env.JWT_SECRET!)
-console.log("secret",secret)
+// Must match backend signing secret exactly; otherwise valid cookies fail verification.
+const jwtSecret = process.env.JWT_SECRET;
 
 
 export async function middleware(request: NextRequest) {
@@ -22,16 +19,19 @@ export async function middleware(request: NextRequest) {
 
   if (token) {
   try {
+    if (!jwtSecret) {
+      // Fail closed to avoid exposing protected pages when env is misconfigured.
+      return NextResponse.redirect(new URL("/signin", request.url));
+    }
+    // jose expects Uint8Array key material for HS256 verification.
+    const secret = new TextEncoder().encode(jwtSecret);
     const { payload } = await jwtVerify(token, secret);
-
-    console.log("Decoded token:", payload);
 
     if (pathname.startsWith("/all-tasks") && payload.role !== "admin") {
       return NextResponse.redirect(new URL("/", request.url));
     }
 
   } catch (error) {
-    console.log("Invalid token", error instanceof Error ? error.message : String(error));
     return NextResponse.redirect(new URL("/signin", request.url));
   }
 }

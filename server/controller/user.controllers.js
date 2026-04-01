@@ -2,6 +2,15 @@ import User from "../models/user.schema.js"
 import bcrypt from "bcrypt"
 import { GenerateToken } from "../auth/jwt.js"
 
+const getCookieOptions = () => ({
+    httpOnly:true,
+    // Cross-site cookies in production require sameSite=none + secure=true.
+    sameSite:process.env.NODE_ENV==="production"?"none":"lax",
+    secure:process.env.NODE_ENV==="production",
+    maxAge:1000*60*60*24,
+    path:"/"
+});
+
 export const registerUser = async(req,res)=>{
     console.log("signin route hit")
     console.log("BODY:", req.body);
@@ -44,13 +53,7 @@ export const signinUser = async(req,res)=>{
 
         const token = GenerateToken(payload);
 
-        res.cookie("token",token,{
-            httpOnly:true,
-            sameSite:process.env.NODE_ENV==="production"?"none":"lax",  // for cross-site origin calls
-            secure:process.env.NODE_ENV==="production",
-            maxAge:1000*60*60*24,
-            path:"/"   //cookie valid for whole website
-        })
+        res.cookie("token",token,getCookieOptions())
       return res.status(200).json({message:"user logged in successfully",token,data:userExist})
     }catch(error){
         console.log("invalid credentials",error)
@@ -60,7 +63,11 @@ export const signinUser = async(req,res)=>{
 
 export const SignoutUser = async(req,res)=>{
     try{
-        res.clearCookie("token")
+        // Use same attributes while clearing so browser removes the correct cookie.
+        const { maxAge, ...clearOptions } = getCookieOptions();
+        res.clearCookie("token", {
+            ...clearOptions
+        })
         return res.status(200).json({message:"signout successfully"})
     }catch(error){
         console.log("error in signin out",error)

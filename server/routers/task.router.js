@@ -1,5 +1,6 @@
 import express from "express"
 import {CreateTask, DeleteTask,fetchMyTasks, fetchAllTasks, UpdateTask} from "../controller/task.controllers.js"
+import AuthMiddleware from "../middleware/auth.middleware.js"
 
 const taskRouter  = express.Router()
 /**
@@ -11,7 +12,7 @@ const taskRouter  = express.Router()
  *       200:
  *         description: Task list fetched successfully
  */
-taskRouter.get("/my-tasks/:userId", fetchMyTasks);
+taskRouter.get("/my-tasks/:userId", AuthMiddleware, fetchMyTasks);
 
 /**
  * @swagger
@@ -22,7 +23,7 @@ taskRouter.get("/my-tasks/:userId", fetchMyTasks);
  *       200:
  *         description: All tasks fetched successfully
  */
-taskRouter.get("/all-tasks", fetchAllTasks);
+taskRouter.get("/all-tasks", AuthMiddleware, fetchAllTasks);
 
 /**
  * @swagger
@@ -33,7 +34,7 @@ taskRouter.get("/all-tasks", fetchAllTasks);
  *       200:
  *         description: Task created successfully
  */
-taskRouter.post("/task", CreateTask);
+taskRouter.post("/task", AuthMiddleware, CreateTask);
 
 /**
  * @swagger
@@ -44,7 +45,7 @@ taskRouter.post("/task", CreateTask);
  *       200:
  *         description: Task updated successfully
  */
-taskRouter.put("/task/:id", UpdateTask);
+taskRouter.put("/task/:id", AuthMiddleware, UpdateTask);
 
 /**
  * @swagger
@@ -55,5 +56,5 @@ taskRouter.put("/task/:id", UpdateTask);
  *       200:
  *         description: Task deleted successfully
  */
-taskRouter.delete("/task/:id", DeleteTask);
+taskRouter.delete("/task/:id", AuthMiddleware, DeleteTask);
 export default taskRouter;
