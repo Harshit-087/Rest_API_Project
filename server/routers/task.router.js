@@ -46,7 +46,7 @@ taskRouter.get("/my-tasks/:userId", AuthMiddleware, fetchMyTasks);
 
 /**
  * @swagger
- * /all-tasks:
+ * /task-api/v1/all-tasks:
  *   get:
  *     summary: Get all tasks for admin
  *     tags: [Task]
@@ -66,7 +66,7 @@ taskRouter.get("/all-tasks", AuthMiddleware, fetchAllTasks);
 
 /**
  * @swagger
- * /task:
+ * /task-api/v1/task:
  *   post:
  *     summary: Create a new task
  *     tags: [Task]
@@ -99,7 +99,7 @@ taskRouter.post("/task", AuthMiddleware, CreateTask);
 
 /**
  * @swagger
- * /task/{id}:
+ * /task-api/v1/task/{id}:
  *   put:
  *     summary: Update task by task id
  *     tags: [Task]
@@ -133,7 +133,7 @@ taskRouter.put("/task/:id", AuthMiddleware, UpdateTask);
 
 /**
  * @swagger
- * /task/{id}:
+ * /task-api/v1/task/{id}:
  *   delete:
  *     summary: Delete task by task id
  *     tags: [Task]

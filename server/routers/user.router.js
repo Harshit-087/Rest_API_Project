@@ -4,7 +4,7 @@ import {registerUser,signinUser,SignoutUser} from "../controller/user.controller
 const userRouter = express.Router();
 /**
  * @swagger
- * /signup:
+ * /user-api/v1/signup:
  *   post:
  *     summary: Register new user
  *     tags: [User]
@@ -43,7 +43,7 @@ const userRouter = express.Router();
  *                   type: string
  *                   example: User registered successfully
  *
- * /signin:
+ * /user-api/v1/signin:
  *   post:
  *     summary: Signin user
  *     tags: [User]
@@ -78,7 +78,7 @@ const userRouter = express.Router();
  *                   type: string
  *                   example: Login successful
  *
- * /signout:
+ * /user-api/v1/signout:
  *   post:
  *     summary: Signout user
  *     tags: [User]
