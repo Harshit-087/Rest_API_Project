@@ -1,7 +1,8 @@
-
 import swaggerJsdoc from "swagger-jsdoc";
 import dotenv from "dotenv";
+
 dotenv.config();
+
 const options = {
   definition: {
     openapi: "3.0.0",
@@ -15,10 +16,24 @@ const options = {
         url: process.env.BACKEND_URL,
       },
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   },
   apis: ["./routers/*.js"],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
 
-export  default swaggerSpec;
+export default swaggerSpec;
