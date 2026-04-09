@@ -7,6 +7,7 @@ import {TaskItem} from "../types/task"
 export default function TaskCard({ task }: { task: TaskItem }) {
 
     const queryClient = useQueryClient();
+   
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
     id:task._id,
@@ -52,6 +53,8 @@ export default function TaskCard({ task }: { task: TaskItem }) {
     }
     setIsEditing(!isEditing)
   }
+  
+  
 
   const handleDelete=()=>{
     deleteMutation.mutate(task._id)
@@ -88,17 +91,28 @@ export default function TaskCard({ task }: { task: TaskItem }) {
         </div>
       
 
-      <div>
-          <label className="text-[10px] uppercase font-bold text-zinc-400 tracking-wider">status</label>
-          <input
-            disabled={!isEditing}
-           
-            value={formData.status}
-            onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-            className={`w-full bg-transparent text-lg font-semibold  outline-none transition-all
-              ${isEditing ? "border-b border-zinc-300 pb-1" : "border-transparent cursor-default"}`}
-          />
-        </div>
+   <div>
+  <label className="text-[10px] uppercase font-bold text-zinc-400 tracking-wider">
+    Status
+  </label>
+
+  <button
+    disabled={!isEditing}
+    onClick={() =>
+      setFormData({
+        ...formData,
+        status: formData.status === "pending" ? "completed" : "pending",
+      })
+    }
+    className={`mt-2 px-3 py-1 rounded-full text-sm font-medium ${
+      formData.status === "pending"
+        ? "bg-yellow-100 text-yellow-700"
+        : "bg-green-100 text-green-700"
+    }`}
+  >
+    {formData.status}
+  </button>
+</div>
       </div>
 
       
